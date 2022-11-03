@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -25,7 +26,7 @@ import com.watermelon.hitoindividualaccesodatos.navigation.Routes
 fun LoginPage(icon: Int, loginViewModel: LoginViewModel, navHostController: NavHostController) {
 
     val id = loginViewModel.id.collectAsState(initial = "")
-
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -61,8 +62,7 @@ fun LoginPage(icon: Int, loginViewModel: LoginViewModel, navHostController: NavH
         )
         Button(
             onClick = {
-                //todo -> comprobar que el id existe en bbdd
-                navHostController.navigate(Routes.Home.route)
+                loginViewModel.handleLogin(id.value, navHostController, context)
             }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
