@@ -31,8 +31,9 @@ fun MyNavHostController(
         composable(Routes.SignUp.route) {
             SignUpPage(signUpViewModel = signUpViewModel, navController = navHost)
         }
-        composable(Routes.Home.route){
-            HomePage(homeViewModel)
+        composable("home/{id}") {
+            val id = it.arguments?.getString("id")!!
+            HomePage(homeViewModel, id)
         }
     }
 }

@@ -3,10 +3,12 @@ package com.watermelon.hitoindividualaccesodatos.home.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -17,7 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HomePage(homeViewModel: HomeViewModel) {
+fun HomePage(homeViewModel: HomeViewModel, id: String) {
+    val nombre = homeViewModel.nombre.collectAsState()
+    val cc = homeViewModel.cc.collectAsState()
+    val balance = homeViewModel.balance.collectAsState()
+    val lista = homeViewModel.transactionList.collectAsState()
+    homeViewModel.getInfo(id)
+    homeViewModel.getTransacction(id)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -40,12 +49,12 @@ fun HomePage(homeViewModel: HomeViewModel) {
             backgroundColor = Color(0xFFF5DD90)
         ) {
             Text(
-                text = "Juan Sebastian Gonzalez",
+                text = nombre.value,
                 modifier = Modifier.padding(top = 16.dp),
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "1750.76",
+                text = balance.value.toString(),
                 textAlign = TextAlign.Center,
                 fontSize = 30.sp,
                 color = Color(0xFFA31708),
@@ -53,14 +62,14 @@ fun HomePage(homeViewModel: HomeViewModel) {
                 modifier = Modifier.padding(top = 32.dp)
             )
             Text(
-                text = "ES241239879",
+                text = cc.value,
                 textAlign = TextAlign.Center,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(top = 75.dp)
             )
         }
         LazyColumn {
-            items(24) {
+            items(lista.value) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -73,13 +82,13 @@ fun HomePage(homeViewModel: HomeViewModel) {
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
                         Column() {
-                            Text(text = "Ingreso", fontWeight = FontWeight.Bold)
-                            Text(text = "Fecha")
+                            Text(text = it.tipoTransaccion, fontWeight = FontWeight.Bold)
+                            Text(text = it.timeStamp)
                         }
                         Column() {
                             Text(
                                 // estaria bien comprobar si es ingreso verde, retiro rojo
-                                text = "1234.123",
+                                text = it.importe.toString(),
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFFA31708)
                             )

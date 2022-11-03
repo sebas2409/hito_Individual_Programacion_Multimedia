@@ -1,5 +1,6 @@
 package com.watermelon.hitoindividualaccesodatos.di
 
+import com.watermelon.hitoindividualaccesodatos.home.data.network.HomeClient
 import com.watermelon.hitoindividualaccesodatos.login.data.network.LoginClient
 import com.watermelon.hitoindividualaccesodatos.sign_up.data.network.SignUpClient
 import dagger.Module
@@ -33,5 +34,11 @@ class ModuleProvider {
     @Singleton
     fun provideLoginClient(retrofit: Retrofit): LoginClient {
         return retrofit.create(LoginClient::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHomeClient(retrofit: Retrofit): HomeClient {
+        return retrofit.create(HomeClient::class.java)
     }
 }

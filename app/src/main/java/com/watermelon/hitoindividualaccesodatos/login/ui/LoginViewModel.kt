@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor(private val loginService: LoginService)
         viewModelScope.launch {
             val rs = loginService.login(id)
             if (rs.id != "") {
-                navHostController.navigate(Routes.Home.route)
+                navHostController.navigate("home/${rs.id}")
             } else {
                 Toast.makeText(context, "El id es incorrecto!", Toast.LENGTH_LONG).show()
             }
