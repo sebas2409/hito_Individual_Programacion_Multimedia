@@ -1,23 +1,23 @@
 package com.watermelon.hitoindividualaccesodatos.home.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.watermelon.hitoindividualaccesodatos.home.data.network.dto.Deposit
 import com.watermelon.hitoindividualaccesodatos.home.data.network.response.Transaction
 import com.watermelon.hitoindividualaccesodatos.home.service.GetAccountInfo
 import com.watermelon.hitoindividualaccesodatos.home.service.GetTransactionList
+import com.watermelon.hitoindividualaccesodatos.home.service.MoneyTransaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getAccountInfo: GetAccountInfo,
-    private val getTransactionList: GetTransactionList
+    private val getTransactionList: GetTransactionList,
+    private val moneyTransaction: MoneyTransaction
 ) : ViewModel() {
 
     private val _nombre = MutableStateFlow("")
@@ -31,6 +31,15 @@ class HomeViewModel @Inject constructor(
 
     private val _transacctionList = MutableStateFlow(arrayListOf<Transaction>())
     val transactionList = _transacctionList.asStateFlow()
+
+    private val _showDepositDialog = MutableStateFlow(false)
+    val showDepositDialog = _showDepositDialog.asStateFlow()
+
+    private val _showWithdrawDialog = MutableStateFlow(false)
+    val showWithdrawDialog = _showWithdrawDialog.asStateFlow()
+
+    private val _cantidad = MutableStateFlow("")
+    val cantidad = _cantidad.asStateFlow()
 
     fun getInfo(id: String) {
         viewModelScope.launch {
@@ -46,6 +55,36 @@ class HomeViewModel @Inject constructor(
             val rs = getTransactionList.getTransactionInfo(id)
             rs.sortByDescending { t -> t.timeStamp }
             _transacctionList.value = rs
+        }
+    }
+
+    fun handleCantidad(cantidad: String) {
+        _cantidad.value = cantidad
+    }
+
+    fun handleDepositDialog(show: Boolean) {
+        _showDepositDialog.value = show
+    }
+
+    fun handleWithdrawDialog(show: Boolean) {
+        _showWithdrawDialog.value = show
+    }
+
+    fun deposit(deposit: Deposit) {
+        viewModelScope.launch {
+            moneyTransaction.deposit(deposit)
+            getTransacction(deposit.clientId)
+            getInfo(deposit.clientId)
+            _showDepositDialog.value = false
+        }
+    }
+
+    fun withdraw(deposit: Deposit) {
+        viewModelScope.launch {
+            moneyTransaction.withdraw(deposit)
+            getTransacction(deposit.clientId)
+            getInfo(deposit.clientId)
+            _showDepositDialog.value = false
         }
     }
 }
