@@ -76,6 +76,7 @@ class HomeViewModel @Inject constructor(
             getTransacction(deposit.clientId)
             getInfo(deposit.clientId)
             _showDepositDialog.value = false
+            _cantidad.value = ""
         }
     }
 
@@ -84,7 +85,8 @@ class HomeViewModel @Inject constructor(
             moneyTransaction.withdraw(deposit)
             getTransacction(deposit.clientId)
             getInfo(deposit.clientId)
-            _showDepositDialog.value = false
+            _showWithdrawDialog.value = false
+            _cantidad.value = ""
         }
     }
 }
