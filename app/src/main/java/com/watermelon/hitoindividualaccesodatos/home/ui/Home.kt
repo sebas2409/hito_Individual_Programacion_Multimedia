@@ -29,9 +29,9 @@ fun HomePage(homeViewModel: HomeViewModel, id: String) {
     val cc = homeViewModel.cc.collectAsState()
     val balance = homeViewModel.balance.collectAsState()
     val lista = homeViewModel.transactionList.collectAsState()
-    val showDepositDialog = homeViewModel.showDepositDialog.collectAsState(false)
-    val showWithdrawDialog = homeViewModel.showWithdrawDialog.collectAsState(false)
-    val cantidad = homeViewModel.cantidad.collectAsState("")
+    val showDepositDialog = homeViewModel.showDepositDialog.collectAsState()
+    val showWithdrawDialog = homeViewModel.showWithdrawDialog.collectAsState()
+    val cantidad = homeViewModel.cantidad.collectAsState()
     homeViewModel.getInfo(id)
     homeViewModel.getTransacction(id)
 
@@ -47,12 +47,6 @@ fun HomePage(homeViewModel: HomeViewModel, id: String) {
                 onClick = { homeViewModel.handleWithdrawDialog(true) },
                 icon = { Icon(Icons.Default.Remove, contentDescription = "Remove") },
                 label = { Text(text = "Retirar") })
-            BottomNavigationItem(
-                selected = false,
-                onClick = { /*TODO*/ },
-                icon = { Icon(Icons.Default.Download, contentDescription = "Download") },
-                label = { Text(text = "Descargar") })
-
         }
     }, content = {
         Column(
